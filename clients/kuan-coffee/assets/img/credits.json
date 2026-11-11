@@ -1,0 +1,68 @@
+{
+  "photos": [
+    {
+      "id": "spread",
+      "alt": "Classic Flavors spread (the Food list's picture and every dish are crops of it), enhanced for the web",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Google Maps, posted by the shop, Nov 2025; enhanced (sharpened and relit) for this demo",
+      "page": "https://www.google.com/maps/search/?api=1&query=Kuan%20Coffee%2C%20Tagum"
+    },
+    {
+      "id": "place-front",
+      "alt": "The shopfront, enhanced for the web and shown by day",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Google Maps, posted by the shop, Nov 2025; enhanced (relit to daylight, Halloween props removed) for this demo",
+      "page": "https://www.google.com/maps/search/?api=1&query=Kuan%20Coffee%2C%20Tagum"
+    },
+    {
+      "id": "place-sign",
+      "alt": "The sign up close, enhanced for the web",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Facebook, posted by the shop; enhanced for this demo",
+      "page": "https://www.facebook.com/kuancoffeeph"
+    },
+    {
+      "id": "place-counter",
+      "alt": "The concrete counter, enhanced for the web",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Facebook, posted by the shop; enhanced for this demo",
+      "page": "https://www.facebook.com/kuancoffeeph"
+    },
+    {
+      "id": "place-machine",
+      "alt": "The machine at the bar, enhanced for the web and cropped clear of equipment logos",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Facebook, posted by the shop; enhanced for this demo",
+      "page": "https://www.facebook.com/kuancoffeeph"
+    },
+    {
+      "id": "place-bar",
+      "alt": "Two people at the bar, enhanced for the web and cropped clear of equipment logos",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Facebook, posted by the shop; enhanced for this demo",
+      "page": "https://www.facebook.com/kuancoffeeph"
+    },
+    {
+      "id": "place-table",
+      "alt": "The Classic Flavors table, enhanced for the web",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Google Maps, posted by the shop, Nov 2025; enhanced (sharpened and relit) for this demo",
+      "page": "https://www.google.com/maps/search/?api=1&query=Kuan%20Coffee%2C%20Tagum"
+    },
+    {
+      "id": "latte",
+      "alt": "Latte in a handmade cup",
+      "by": "Kuan Coffee",
+      "licence": "the shop's own photograph",
+      "source": "Instagram @kuancoffeeph, 24 Jan 2026",
+      "page": "https://www.instagram.com/p/DT7OZOSE1Ly/"
+    }
+  ]
+}

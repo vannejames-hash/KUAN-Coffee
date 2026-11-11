@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "node build.mjs --client kuan-coffee",
+  "outputDirectory": "dist/kuan-coffee",
+  "framework": null,
+  "installCommand": "echo 'no install needed'",
+  "cleanUrls": true
+}

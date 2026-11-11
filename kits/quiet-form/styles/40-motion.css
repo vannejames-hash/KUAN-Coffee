@@ -1,0 +1,30 @@
+/* ---------- Motion ----------
+   One language across the page:
+   - mark: pieces part along their own directions and re-form (nav, menu markers, footer, map pin)
+   - sculpture: slow float, pointer tilt, a lift-and-settle on press
+   - draw: a line runs (the ritual rail and figures, the map route)
+   - crop: a photograph shifts inside its frame
+   - slide: sheets, the phone bar
+   Entrances happen once, when their section comes into view: the ritual plays grind, pull, pour, cup in about 1.4s. Nothing is tied to scroll distance. */
+.js [data-enter] { opacity: 0; transform: translateY(10px); }
+.js .is-entered [data-enter] { opacity: 1; transform: none; transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out); }
+.js .is-entered .hero-object[data-enter] { transition-delay: 90ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mr-drift { animation: none !important; }
+  .mr-shape { transition: none !important; animation: none !important; }
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; transition-delay: 0ms !important; }
+  .js [data-enter] { opacity: 1; transform: none; }
+  .ritual-stage { --p: 1 !important; }
+  .ritual-head { opacity: 0; }
+  .fig-line, .cup-line, .fig-stream, .fig-pour { stroke-dashoffset: 0 !important; }
+  .fig-coffee, .fig-crema { transform: translateY(6px) !important; }
+  .cup-coffee, .cup-crema { transform: none !important; }
+  .cup-steam { opacity: 0.6 !important; animation: none !important; }
+  .js .close-svg:not(.is-formed) .mk { --open: 0px; }
+  .wayfind .route { stroke-dashoffset: 0; }
+  .wayfind .pin-body { opacity: 1; transform: none; }
+  .wayfind .pin-ring { animation: none !important; }
+  [data-drift] { transform: none !important; }
+  .js .collage .shot-media { clip-path: none !important; transition: none !important; }
+}

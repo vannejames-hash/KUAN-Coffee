@@ -1,5 +1,13 @@
 # Kuan Coffee changelog
 
+## V7 (2026-11-11): phone hero, the mark as a landscape
+
+- **Phones only.** The hero is no longer the desktop sculpture stacked with the copy. The first screen is a cobalt poster: K and U large at the top, A and N rising from the bottom edge, each cropped by the screen, and the headline, both buttons and the live "Open now" status set in the gap between them.
+- **Entrance (about 1.1s):** the four forms part outward from the middle to make room for the words, then the buttons arrive. After that there is only slow drift, and a tap nudges a form.
+- **Below the poster:** the intro and the hours note, on the off-white ground, then the facts.
+- **Reduced motion:** the finished poster, still.
+- Checked at 375 × 812, 390 × 844 and 430 × 932. Desktop is unchanged; the headless hero test matches.
+
 ## V6.2 (2026-11-11): phone hero order
 
 - Phones only: the hero copy and buttons now come first and the sculpture follows them, at its V6.1 size. The copy gets 20px of room under the nav. Nothing else changed.

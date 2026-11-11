@@ -12,6 +12,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mr-drift { animation: none !important; }
+  .hf, .hf-drift, .hf-shape, .hero-copy > * { animation: none !important; }
   .mr-shape { transition: none !important; animation: none !important; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; transition-delay: 0ms !important; }
   .js [data-enter] { opacity: 1; transform: none; }

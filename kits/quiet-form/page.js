@@ -137,6 +137,18 @@ function nav({ business, content, brand }) {
 </header>`;
 }
 
+// Phones only: the mark as a landscape. K and U stand at the top of a cobalt poster, A and N rise from its foot,
+// each cropped by the edge, and the headline lives in the gap between them. On load the four forms part outward
+// from the middle to make room for the words. Flat SVG + CSS transforms; the desktop sculpture is not used here.
+const POSTER_TILT = { K: -9, U: 8, A: 14, N: -3 };
+function heroForms(mark) {
+  const forms = LETTERS.map((l, i) => {
+    const [bx, by, bw, bh] = BOX[l];
+    return `<span class="hf hf-${l}" style="--i:${i};--r:${POSTER_TILT[l]}deg"><span class="hf-drift"><svg class="hf-shape" viewBox="${bx} ${by} ${bw} ${bh}" focusable="false"><path d="${mark.pieces[l].d}"/></svg></span></span>`;
+  }).join('');
+  return `<div class="hero-forms" aria-hidden="true"><svg class="hf-pattern" viewBox="0 0 400 760" preserveAspectRatio="xMidYMid slice" focusable="false">${patternFrags(mark, 11, { w: 400, h: 760, count: 9, edge: 0.94 })}</svg>${forms}</div>`;
+}
+
 function hero({ business, menu, content, brand }) {
   const h = content.hero;
   const mark = brand.mark;
@@ -154,8 +166,10 @@ function hero({ business, menu, content, brand }) {
         <button class="btn btn-primary" type="button" data-open-order>${esc(h.primary)}</button>
         <button class="btn btn-line" type="button" data-open-delivery>${esc(h.secondary)}</button>
       </div>
+      <p class="hero-status status" data-status></p>
       <p class="hero-note">${esc(h.note)}</p>
     </div>
+    ${heroForms(mark)}
     <div class="hero-object" data-enter>
       <button class="sculpt-stage" type="button" aria-label="${esc(h.markLabel)}">
         <svg class="sculpt-pattern" viewBox="0 0 900 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><g data-drift>${patternFrags(mark, 7, { w: 900, h: 760, count: 14, edge: 0.94 })}</g></svg>

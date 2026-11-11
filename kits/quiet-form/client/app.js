@@ -321,6 +321,17 @@ if (ritualStage) {
   io.observe(ritualStage);
 }
 
+/* ---------- Phone hero: a tap on one of the four forms nudges it and lets it settle ---------- */
+$$('.hf-shape').forEach((el) => {
+  el.addEventListener('pointerdown', () => {
+    if (reduce.matches) return;
+    el.classList.remove('is-nudged');
+    void el.getBoundingClientRect();
+    el.classList.add('is-nudged');
+  });
+  el.addEventListener('animationend', () => el.classList.remove('is-nudged'));
+});
+
 /* ---------- Menu signature: the four forms in a row. A tap nudges a form and lets it return; it selects nothing. ---------- */
 $$('.mark-row .mr-shape').forEach((el) => {
   el.addEventListener('click', () => {

@@ -1,5 +1,9 @@
 # Kuan Coffee changelog
 
+## V6.2 (2026-11-11): phone hero order
+
+- Phones only: the hero copy and buttons now come first and the sculpture follows them, at its V6.1 size. The copy gets 20px of room under the nav. Nothing else changed.
+
 ## V6.1 (2026-11-11): phone hero
 
 - **Phones only.** The cobalt band is now about a third of the screen tall, flush under the nav, with smaller forms in it. The "Tap a piece" line is hidden.

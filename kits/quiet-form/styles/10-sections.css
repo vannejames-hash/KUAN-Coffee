@@ -56,10 +56,10 @@
 /* Phones: a composition of their own. A cobalt band about a third of the screen tall sits flush under the nav, with
    the forms small inside it; the label, headline, lede and Order ahead all land on the first screen (375 x 812 up). */
 @media (max-width: 760px) {
-  .hero { min-height: 0; padding-top: var(--nav-h); gap: 22px; }
+  .hero { min-height: 0; padding-top: calc(var(--nav-h) + 20px); gap: 22px; }
   .hero-grid { grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
   .hero-copy, .hero-object { grid-column: 1; }
-  .hero-object { order: -1; margin-inline: calc(var(--gutter) * -1); gap: 0; }
+  .hero-object { margin-inline: calc(var(--gutter) * -1); gap: 0; }
   .sculpt-stage { height: clamp(196px, 33svh, 290px); }
   .sculpt { inset: 7% 4%; width: 92%; height: 86%; }
   .sculpt-pattern { opacity: 0.05; }

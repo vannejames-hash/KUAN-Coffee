@@ -39,7 +39,7 @@ export const sculpture = {
     N: { dx: 0, dy: -24, dz: 16, rx: -2, ry: -3, rz: -3, sway: 0.5 },
   },
   narrow: {
-    scale: 1.5,
+    scale: 1.32,
     pieces: {
       K: { dx: -4, dy: 14, dz: 10, rx: 2, ry: -4, rz: -8, sway: 1.1 },
       U: { dx: 4, dy: 14, dz: 24, rx: -3, ry: 3, rz: 11, sway: -0.8 },

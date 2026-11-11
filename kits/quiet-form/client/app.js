@@ -189,8 +189,9 @@ const sculpt = (() => {
     if (reduce.matches || m < 0.95) return;
     const target = parts.find((p) => p.l === letter) || parts[next++ % parts.length];
     const dir = Math.random() < 0.5 ? -1 : 1;
-    target.vz += 110;
-    target.vrz += dir * (24 + Math.random() * 8);
+    const k = narrowMQ.matches ? 0.65 : 1;
+    target.vz += 110 * k;
+    target.vrz += dir * (24 + Math.random() * 8) * k;
     hint?.classList.remove('is-nudging');
   }
 

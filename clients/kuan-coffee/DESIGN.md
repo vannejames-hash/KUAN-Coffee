@@ -36,7 +36,7 @@ The whole mark appears as:
 
 - **Material:** flat warm white with no edge slab (`thickness: 0`), no shadow, no gloss. Each form has a few degrees of its own perspective (rx/ry), so the faces differ by a shade. The only edge is a 1px hairline in deep cobalt, invisible on the field and crisp where white meets white.
 - **Size:** scale 1.62 in a 600 × 640 frame; the group fills about 65% of the cobalt field.
-- **Phones:** `sculpture.narrow` is its own composition (scale 1.5, tighter offsets, gentler angles), not the desktop one shrunk.
+- **Phones:** a hero of its own. The cobalt band sits flush under a 50px nav and is about a third of the screen tall (196–290px). `sculpture.narrow` sets smaller forms (scale 1.32, tighter offsets, gentler angles) with the same drift, and a tap gives about two thirds of the desktop impulse. The "Tap a piece" hint is hidden. Label, headline, a 4-line lede and both buttons side by side follow, so Order ahead is on the first screen at 375 × 812, 390 × 844 and 430 × 932. The pattern drops to 5%.
 - **Intro:** the flat logo eases into the composition over 2s.
 - **Idle:** about 1.3 units of drift and 0.25° of turn, on 11–20 second cycles that differ per form.
 - **Pointer:** a small group tilt (2° and 3° at rest, up to 3.5° with the pointer), parallax by depth, and a turn of its own per form (`sway`: K 1.1°, U −0.8°, A 1.6°, N 0.5°), all lagging the pointer (lerp 0.035).

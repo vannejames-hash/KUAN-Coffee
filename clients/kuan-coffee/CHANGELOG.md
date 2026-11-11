@@ -1,5 +1,13 @@
 # Kuan Coffee changelog
 
+## V6.1 (2026-11-11): phone hero
+
+- **Phones only.** The cobalt band is now about a third of the screen tall, flush under the nav, with smaller forms in it. The "Tap a piece" line is hidden.
+- **Nav:** 50px tall on phones, with a slimmer Order ahead button.
+- **Copy:** tighter spacing, a narrower 4-line lede, and the two buttons side by side. The label, headline, lede and Order ahead all fit on the first screen at 375 × 812, 390 × 844 and 430 × 932, and the hero facts begin below them.
+- **Motion:** a tap moves a form about two thirds as far as on desktop.
+- Desktop is unchanged (checked with the headless hero test).
+
 ## V6 (2026-11-11): collage scale, ritual timing, menu signature
 
 - **The place:** the composition is now wide (up to 1680px) and about 58% of the screen tall: 626px at 1920 × 1080, 522px at 1440 × 900. The shopfront is dominant and the counter second, both full height; the sign, machine, bar and table are square details in two rows. Same six photos, recut to the new cells. One gutter, no overlaps. On phones the counter stands two rows tall, cropped to keep the "kuan." lettering.

@@ -53,17 +53,24 @@
   .hero-copy { grid-column: 1 / span 6; }
   .hero-object { grid-column: 7 / -1; }
 }
+/* Phones: a composition of their own. A cobalt band about a third of the screen tall sits flush under the nav, with
+   the forms small inside it; the label, headline, lede and Order ahead all land on the first screen (375 x 812 up). */
 @media (max-width: 760px) {
-  .hero { min-height: 0; padding-top: calc(var(--nav-h) + 16px); gap: 26px; }
-  .hero-grid { grid-template-columns: minmax(0, 1fr); row-gap: 22px; }
+  .hero { min-height: 0; padding-top: var(--nav-h); gap: 22px; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); row-gap: 18px; }
   .hero-copy, .hero-object { grid-column: 1; }
-  .hero-object { order: -1; margin-inline: calc(var(--gutter) * -1); gap: 8px; }
-  .sculpt-stage { height: min(100vw, 420px); }
-  .mark-hint { padding-inline: var(--gutter); }
+  .hero-object { order: -1; margin-inline: calc(var(--gutter) * -1); gap: 0; }
+  .sculpt-stage { height: clamp(196px, 33svh, 290px); }
+  .sculpt { inset: 7% 4%; width: 92%; height: 86%; }
+  .sculpt-pattern { opacity: 0.05; }
+  .mark-hint { display: none; }
   .display { font-size: clamp(2rem, 1.35rem + 3.2vw, 2.5rem); }
-  .hero-copy { gap: 14px; }
-  .hero-copy .lede { font-size: 1rem; }
-  .hero-copy .actions .btn { flex: 1 1 100%; }
+  .hero-copy { gap: 12px; }
+  .hero-copy .display { line-height: 1.04; }
+  .hero-copy .lede { font-size: 0.9375rem; line-height: 1.45; max-width: 36ch; }
+  .hero-copy .actions { margin-top: 4px; gap: 8px; flex-wrap: nowrap; }
+  .hero-copy .actions .btn { flex: 1 1 0; min-width: 0; padding-inline: 12px; }
+  .hero-note { font-size: 0.6875rem; }
   .titleblock { grid-template-columns: 1fr 1fr; }
   .titleblock > div:nth-child(3) { padding-left: 0; border-left: 0; }
   .titleblock > div:nth-child(n + 3) { border-top: var(--hair); }

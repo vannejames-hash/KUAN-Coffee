@@ -91,9 +91,6 @@ function jsonLd({ business, menu }) {
   }).replace(/</g, '\\u003c');
 }
 
-// The hero composition's frame: 600 x 640 units, the mark centred at this scale (it fills most of the frame).
-const STAGE = { w: 600, h: 640, cx: 300, cy: 322, scale: 1.62 };
-
 function storeData({ business, menu, content, brand }) {
   return JSON.stringify({
     name: business.fullName,
@@ -107,13 +104,6 @@ function storeData({ business, menu, content, brand }) {
     categories: menu.categories,
     demo: content.demo,
     itemPhotos: Object.fromEntries(allItems(menu).filter((i) => i.photo).map((i) => { const im = content.images[i.photo]; return [i.id, { src: largest(im), alt: im.alt }]; })),
-    sculpture: {
-      ...STAGE,
-      markW: brand.mark.width,
-      markH: brand.mark.height,
-      ...brand.sculpture,
-      polys: Object.fromEntries(LETTERS.map((l) => [l, brand.mark.pieces[l].poly])),
-    },
   }).replace(/</g, '\\u003c');
 }
 
@@ -137,14 +127,16 @@ function nav({ business, content, brand }) {
 </header>`;
 }
 
-// Phones only: the mark as a landscape. K and U stand at the top of a cobalt poster, A and N rise from its foot,
-// each cropped by the edge, and the headline lives in the gap between them. On load the four forms part outward
-// from the middle to make room for the words. Flat SVG + CSS transforms; the desktop sculpture is not used here.
+// The hero: the mark as a landscape. K and U stand at the top of a cobalt poster, A and N rise from its foot, each
+// cropped by the edge, and the headline lives in the gap between them. On load the four forms part outward from the
+// middle to make room for the words. Flat SVG + CSS transforms; phones and desktop share it, composed per width.
+// `--d` is how far (px) a form leans toward the pointer: nearer forms more, and opposite ways.
 const POSTER_TILT = { K: -9, U: 8, A: 14, N: -3 };
+const POSTER_LEAN = { K: 14, U: -10, A: 18, N: -8 };
 function heroForms(mark) {
   const forms = LETTERS.map((l, i) => {
     const [bx, by, bw, bh] = BOX[l];
-    return `<span class="hf hf-${l}" style="--i:${i};--r:${POSTER_TILT[l]}deg"><span class="hf-drift"><svg class="hf-shape" viewBox="${bx} ${by} ${bw} ${bh}" focusable="false"><path d="${mark.pieces[l].d}"/></svg></span></span>`;
+    return `<span class="hf hf-${l}" style="--i:${i};--r:${POSTER_TILT[l]}deg;--d:${POSTER_LEAN[l]}"><span class="hf-drift"><svg class="hf-shape" viewBox="${bx} ${by} ${bw} ${bh}" focusable="false"><path d="${mark.pieces[l].d}"/></svg></span></span>`;
   }).join('');
   return `<div class="hero-forms" aria-hidden="true"><svg class="hf-pattern" viewBox="0 0 400 760" preserveAspectRatio="xMidYMid slice" focusable="false">${patternFrags(mark, 11, { w: 400, h: 760, count: 9, edge: 0.94 })}</svg>${forms}</div>`;
 }
@@ -152,13 +144,10 @@ function heroForms(mark) {
 function hero({ business, menu, content, brand }) {
   const h = content.hero;
   const mark = brand.mark;
-  const S = STAGE;
   const prices = allItems(menu).map((i) => i.price).filter((p) => typeof p === 'number');
-  // First paint (and no-JS): the flat logo, white on cobalt. The script lifts it into the sculpture.
-  const flat = `<g class="sp-flat" transform="translate(${S.cx - (mark.width / 2) * S.scale} ${S.cy - (mark.height / 2) * S.scale}) scale(${S.scale})">${LETTERS.map((l) => `<path d="${mark.pieces[l].d}"/>`).join('')}</g>`;
   return `<section class="hero" id="top" aria-labelledby="hero-title">
   <div class="wrap hero-grid">
-    <div class="hero-copy" data-enter>
+    <div class="hero-copy">
       <p class="label">${esc(h.label)}</p>
       <h1 class="display" id="hero-title">${esc(h.title)}</h1>
       <p class="lede">${esc(h.lede)}</p>
@@ -170,15 +159,6 @@ function hero({ business, menu, content, brand }) {
       <p class="hero-note">${esc(h.note)}</p>
     </div>
     ${heroForms(mark)}
-    <div class="hero-object" data-enter>
-      <button class="sculpt-stage" type="button" aria-label="${esc(h.markLabel)}">
-        <svg class="sculpt-pattern" viewBox="0 0 900 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><g data-drift>${patternFrags(mark, 7, { w: 900, h: 760, count: 14, edge: 0.94 })}</g></svg>
-        <svg class="sculpt" viewBox="0 0 ${S.w} ${S.h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(business.fullName)} logo: four white forms on a cobalt field" shape-rendering="geometricPrecision">
-          <g class="sp-pieces">${flat}</g>
-        </svg>
-      </button>
-      <p class="mark-hint" data-hint data-touch="${esc(h.hint.touch)}" aria-hidden="true"><span class="hint-dot"></span><span data-hint-text>${esc(h.hint.pointer)}</span></p>
-    </div>
   </div>
   <div class="wrap">
     <dl class="titleblock">
@@ -515,7 +495,7 @@ function dialogs({ business, content, brand }) {
 
 export function renderPage(ctx) {
   const { business, content, theme } = ctx;
-  if (!ctx.brand?.mark || !ctx.brand?.sculpture) throw new Error('quiet-form needs brand.js with `mark` and `sculpture`');
+  if (!ctx.brand?.mark) throw new Error('quiet-form needs brand.js with `mark`');
   return `<!doctype html>
 <html lang="en" data-type="place">
 <head>

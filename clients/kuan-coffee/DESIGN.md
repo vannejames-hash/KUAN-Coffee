@@ -1,10 +1,10 @@
-# Kuan Coffee: design system (V6, as built)
+# Kuan Coffee: design system (V8, as built)
 
 Kit: `kits/quiet-form/` (selected by `theme.kit`). Client config: `clients/kuan-coffee/`.
 
 ## The mark as a system
 
-The logo's four letters are four shapes, traced in `brand.js` (a demo trace; the shop's vector replaces it). `poly` holds the same outlines as points for the 3D hero.
+The logo's four letters are four shapes, traced in `brand.js` (a demo trace; the shop's vector replaces it).
 
 | Letter | Shape | Marks |
 |---|---|---|
@@ -15,7 +15,7 @@ The logo's four letters are four shapes, traced in `brand.js` (a demo trace; the
 
 The whole mark appears as:
 
-- **Hero:** four large, flat white forms, each at its own angle.
+- **Hero:** the mark as a landscape: four large white forms cropped by the poster's edges, the headline between them.
 - **Nav:** the brand mark, which parts on hover.
 - **Order steps:** the four letters fill as the visitor moves through checkout.
 - **Map pin.**
@@ -23,27 +23,24 @@ The whole mark appears as:
 - **Footer:** the mark re-forms on arrival.
 - **Pattern:** fragments of the mark.
 
-## Hero forms
+## Hero: the mark as a landscape
 
-`brand.js > sculpture` sets the composition: four flat forms, each placed and angled by hand, not on a shared axis.
+One composition at every width, made for phones first. The hero is a cobalt poster, full bleed under the nav. K and U stand at its top and A and N rise from its foot, each a flat SVG cropped by the edge and set at its own angle (K −9°, U 8°, A 14°, N −3°). The words live in the gap between them. The facts follow on the ground.
 
-| Form | Turn | Role |
-|---|---|---|
-| K | 11° counter-clockwise | leans back |
-| U | 9° clockwise | the tilted form at the top right |
-| A | 16° clockwise | the noticeably angled one |
-| N | 3° counter-clockwise | almost upright |
-
-- **Material:** flat warm white with no edge slab (`thickness: 0`), no shadow, no gloss. Each form has a few degrees of its own perspective (rx/ry), so the faces differ by a shade. The only edge is a 1px hairline in deep cobalt, invisible on the field and crisp where white meets white.
-- **Size:** scale 1.62 in a 600 × 640 frame; the group fills about 65% of the cobalt field.
-- **Phones:** a hero of its own, not the sculpture: the mark as a landscape. The first screen is a cobalt poster. K and U stand at the top and A and N rise from its foot, each a flat SVG cropped by the edge, at its own angle (K −9°, U 8°, A 14°, N −3°), four whites a shade apart. The eyebrow, the white headline, Order ahead (paper) and Call for delivery (paper outline), and the live open/closed status sit in the gap between them, so the words live inside the mark. The lede and note follow on the ground, then the facts. On load the forms part outward from the middle (950ms), the words settle (from 260ms), then the buttons (from 520ms); all of it is done by about 1.1s. Ambient drift is 2px and 0.5° on 8–13s cycles; a tap nudges a form 8px and 4° and it settles. Reduced motion shows the finished poster. Pattern 5%.
-- **Intro:** the flat logo eases into the composition over 2s.
-- **Idle:** about 1.3 units of drift and 0.25° of turn, on 11–20 second cycles that differ per form.
-- **Pointer:** a small group tilt (2° and 3° at rest, up to 3.5° with the pointer), parallax by depth, and a turn of its own per form (`sway`: K 1.1°, U −0.8°, A 1.6°, N 0.5°), all lagging the pointer (lerp 0.035).
-- **Hover:** the form under the pointer lifts 4 units and turns 2.2° in the direction of its own tilt, slowly.
-- **Press:** a heavy spring (k 60, damping 10) at a fixed 1/120s step; the pressed form rises and turns 3–4°, then settles.
-- **Only runs on screen;** the loop stops when the hero is off screen or the tab is hidden.
-- **Without JS:** the flat white logo. **Reduced motion:** the composition, still.
+- **Material:** flat, matte, no shadow, no edge. Four whites a shade apart (`#FAF8F3`, `#F3F0E9`, `#F7F4EE`, `#EEEAE2`) are the only depth, as if lit from the upper left. Pattern 5%.
+- **Desktop:**
+  - The headline is left, in white, up to 72px. The intro, Order ahead (off-white), Call for delivery (off-white outline) and the ordering note are right. The live open/closed status sits under the headline.
+  - The poster is about the screen tall: the top band is 21svh, the foot 22svh.
+  - K hangs at the left and U at the centre from the top edge; A (under the headline) and N (under the buttons) stand on the foot. Each ends just short of the words.
+- **Phones:** one column. The eyebrow, headline, both buttons and status are in the poster; K and U are larger and cut by the sides; the intro and note follow below on the ground.
+- **Entrance (about 1.1s):** the forms part outward from the middle (950ms, 45ms apart), the words settle from 260ms, and the buttons, status and note from 520ms.
+- **Ambient:** each form drifts 2px and 0.5° on its own 8–13s cycle.
+- **Pointer (mouse only):**
+  - Each form leans toward the pointer by its own depth (K 14px, U −10px, A 18px, N −8px), lagging 1.4s.
+  - Hover lifts a form 6px and turns it 2.5°.
+  - A press, or a tap on phones, nudges it 8px and 4°, and it settles.
+  - Nothing in the hero is a control except the buttons.
+- **Reduced motion:** the finished poster, still, with no entrance.
 
 ## The place
 
@@ -117,7 +114,7 @@ It drifts up to 7px with the pointer.
 Verbs:
 
 - **mark:** the pieces part and re-form.
-- **sculpture:** float, tilt, lift.
+- **landscape:** the hero's forms part, drift, lean and settle.
 - **draw:** the ritual line and figures, the map route.
 - **crop:** a photo shifts in its frame.
 - **slide:** sheets, the phone bar.
@@ -129,7 +126,7 @@ Rules:
 - **Ritual:** on entry (a quarter of the stage visible), the line runs for 1.2s. Grind draws at once, pull at about 0.5s, pour about 0.8s, the cup about 1.1s; its coffee fills right after, so it has settled by about 1.4s.
 - **Menu signature:** each form drifts about 1.5px and 0.4° on its own 9–14s cycle; hover lifts a form 5px and turns it 3°; a tap nudges it up 9px and back in 760ms.
 - **Map sequence:** the route draws over 1.5s, the mark lands at 1.35s, then the pin pulses twice.
-- **Reduced motion:** everything rests in its final state (sculpture posed, figures drawn, cup filled, route drawn, mark formed). The sculpture stays still.
+- **Reduced motion:** everything rests in its final state (poster composed, figures drawn, cup filled, route drawn, mark formed).
 
 ## Components
 

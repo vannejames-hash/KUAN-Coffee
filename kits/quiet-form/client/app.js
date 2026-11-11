@@ -51,226 +51,6 @@ function toast(msg) {
   toastT = setTimeout(() => { toastEl.hidden = true; }, 2400);
 }
 
-/* ---------- Hero: the mark as four white forms on the cobalt field ----------
-   A tiny projector: each letter is a flat form set at its own angle (data.sculpture), with a few degrees of its own
-   perspective, a hairline edge and no shadow. Phones get their own composition. On load the flat logo eases in. */
-const SC = data.sculpture;
-const stage = $('.sculpt-stage');
-const NS = 'http://www.w3.org/2000/svg';
-const D2R = Math.PI / 180;
-const PERSP = 1150;
-const norm = (v) => { const l = Math.hypot(...v); return v.map((x) => x / l); };
-const LIGHT = norm([-0.5, -0.72, 0.6]);
-const mix = (a, b, t) => `rgb(${a.map((x, i) => Math.round(x + (b[i] - x) * t)).join(',')})`;
-// Flat warm white faces; the edge is the same material a shade darker, only ever a sliver. No shadows.
-const SIDE_DARK = [196, 189, 176];
-const SIDE_LIT = [226, 221, 211];
-const FACE_DARK = [241, 238, 231];
-const FACE_LIT = [251, 250, 246];
-function rot([x, y, z], rx, ry, rz) {
-  let c = Math.cos(rz * D2R); let s = Math.sin(rz * D2R);
-  [x, y] = [x * c - y * s, x * s + y * c];
-  c = Math.cos(rx * D2R); s = Math.sin(rx * D2R);
-  [y, z] = [y * c - z * s, y * s + z * c];
-  c = Math.cos(ry * D2R); s = Math.sin(ry * D2R);
-  [x, z] = [x * c + z * s, -x * s + z * c];
-  return [x, y, z];
-}
-const pathOf = (pts) => `M${pts.map((p) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join('L')}Z`;
-const make = (tag, cls) => { const e = document.createElementNS(NS, tag); if (cls) e.setAttribute('class', cls); return e; };
-
-const narrowMQ = matchMedia('(max-width: 760px)');
-const poseFor = (l) => (narrowMQ.matches && SC.narrow ? SC.narrow.pieces[l] : SC.pieces[l]);
-const scaleNow = () => (narrowMQ.matches && SC.narrow ? SC.narrow.scale : SC.scale);
-
-const sculpt = (() => {
-  if (!stage) return null;
-  const piecesG = $('.sp-pieces', stage);
-  const hint = $('[data-hint]');
-  const letters = Object.keys(SC.polys);
-  const mcx = SC.markW / 2;
-  const mcy = SC.markH / 2;
-  const parts = letters.map((l, i) => {
-    const pts = SC.polys[l];
-    const xs = pts.map((p) => p[0]);
-    const ys = pts.map((p) => p[1]);
-    const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
-    const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
-    const local = pts.map(([x, y]) => [x - cx, y - cy]);
-    const normals = local.map((a, k) => { const b = local[(k + 1) % local.length]; const n = norm([b[1] - a[1], -(b[0] - a[0])]); return [n[0], n[1], 0]; });
-    const g = make('g', 'sp-piece');
-    g.dataset.piece = l;
-    const sides = local.map(() => make('path', 'sp-side'));
-    const front = make('path', 'sp-front');
-    return { l, cx, cy, local, normals, g, sides, front, order: '', pose: poseFor(l), phase: i * 1.9 + 0.4, z: 0, vz: 0, rz: 0, vrz: 0, lift: 0, liftTo: 0, turn: 0, turnTo: 0 };
-  });
-
-  let m = 0;
-  const aim = { x: 0, y: 0 };
-  const cur = { x: 0, y: 0 };
-  let t = 0;
-  let built = false;
-
-  function build() {
-    $('.sp-flat', piecesG)?.remove();
-    for (const p of parts) { p.sides.forEach((s) => p.g.append(s)); p.g.append(p.front); piecesG.append(p.g); }
-    narrowMQ.addEventListener?.('change', () => { parts.forEach((p) => { p.pose = poseFor(p.l); }); render(); });
-    built = true;
-  }
-
-  function render() {
-    const S = scaleNow();
-    const T = SC.thickness * m;
-    // Barely-there drift: long, different periods per form, a unit or so of travel, a quarter degree of turn.
-    const gx = m * (SC.tilt.rx - cur.y * 2.5) + (m * 0.35 * Math.sin((t * 2 * Math.PI) / 19));
-    const gy = m * (SC.tilt.ry + cur.x * 3.5) + (m * 0.5 * Math.sin((t * 2 * Math.PI) / 17 + 1));
-    const placed = parts.map((p) => {
-      const ps = p.pose;
-      const fy = m * 1.3 * Math.sin((t * 2 * Math.PI) / (11.4 + p.phase) + p.phase);
-      const frz = m * 0.25 * Math.sin((t * 2 * Math.PI) / (14.2 + p.phase) + p.phase * 1.3);
-      const fz = m * 1.8 * Math.sin((t * 2 * Math.PI) / (12.6 + p.phase) + p.phase * 0.7);
-      // Parallax by depth: forms nearer the viewer travel further with the pointer.
-      const depth = (ps.dz + 8) * 0.09;
-      const prx = m * ps.rx;
-      const pry = m * ps.ry;
-      // Each form turns its own amount with the pointer (sway), so the group never moves as one sheet.
-      const prz = m * (ps.rz + cur.x * (ps.sway || 0)) + frz + p.rz + p.turn;
-      const off = [p.cx - mcx + m * (ps.dx + cur.x * depth), p.cy - mcy + m * (ps.dy + cur.y * depth) + fy, m * ps.dz + fz + p.z + p.lift];
-      const toWorld = (v) => {
-        const r = rot(v, prx, pry, prz);
-        const w = rot([r[0] + off[0], r[1] + off[1], r[2] + off[2]], gx, gy, 0);
-        return [w[0] * S, w[1] * S, w[2] * S];
-      };
-      const project = (w) => { const f = PERSP / (PERSP - w[2]); return [SC.cx + w[0] * f, SC.cy + w[1] * f]; };
-      const F = p.local.map(([x, y]) => toWorld([x, y, T / 2]));
-      const B = p.local.map(([x, y]) => toWorld([x, y, -T / 2]));
-      const F2 = F.map(project);
-      const B2 = B.map(project);
-      const dirOf = (n) => rot(rot(n, prx, pry, prz), gx, gy, 0);
-      const nF = dirOf([0, 0, 1]);
-      p.front.setAttribute('d', pathOf(F2));
-      p.front.style.fill = mix(FACE_DARK, FACE_LIT, Math.min(1, Math.max(0, nF[0] * LIGHT[0] + nF[1] * LIGHT[1] + nF[2] * LIGHT[2]) * 1.15));
-      const visible = [];
-      p.sides.forEach((side, k) => {
-        const n = dirOf(p.normals[k]);
-        if (T < 0.2 || n[2] < 0.015) { side.setAttribute('d', ''); return; }
-        const k2 = (k + 1) % p.local.length;
-        side.setAttribute('d', pathOf([F2[k], F2[k2], B2[k2], B2[k]]));
-        const c = mix(SIDE_DARK, SIDE_LIT, Math.min(1, Math.max(0, n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2])));
-        side.style.fill = c;
-        side.style.stroke = c;
-        visible.push([k, (F[k][2] + F[k2][2] + B[k][2] + B[k2][2]) / 4]);
-      });
-      const ord = visible.sort((a, b) => a[1] - b[1]).map((v) => v[0]).join(',');
-      if (ord !== p.order) { p.order = ord; visible.forEach(([k]) => p.g.insertBefore(p.sides[k], p.front)); }
-      return [p, F.reduce((s, w) => s + w[2], 0) / F.length];
-    });
-    placed.sort((a, b) => a[1] - b[1]).forEach(([p], i) => { if (piecesG.children[i] !== p.g) piecesG.append(p.g); });
-  }
-
-  // Physics for a press: fixed-step springs, so a lift always settles the same way.
-  const STEP = 1 / 120;
-  let acc = 0;
-  function physics(dt) {
-    acc += Math.min(dt, 0.05);
-    while (acc >= STEP) {
-      for (const p of parts) {
-        // Heavy and slightly underdamped: a pressed form travels, overshoots a touch, and settles.
-        p.vz += (-60 * p.z - 10 * p.vz) * STEP; p.z += p.vz * STEP;
-        p.vrz += (-60 * p.rz - 9.5 * p.vrz) * STEP; p.rz += p.vrz * STEP;
-        p.lift += (p.liftTo - p.lift) * 0.025;
-        p.turn += (p.turnTo - p.turn) * 0.025;
-      }
-      acc -= STEP;
-    }
-  }
-  let next = 0;
-  function act(letter) {
-    if (reduce.matches || m < 0.95) return;
-    const target = parts.find((p) => p.l === letter) || parts[next++ % parts.length];
-    const dir = Math.random() < 0.5 ? -1 : 1;
-    const k = narrowMQ.matches ? 0.65 : 1;
-    target.vz += 110 * k;
-    target.vrz += dir * (24 + Math.random() * 8) * k;
-    hint?.classList.remove('is-nudging');
-  }
-
-  let running = false;
-  let visible = true;
-  let last = 0;
-  let introStart = 0;
-  const ease = (x) => (x < 0.5 ? 4 * x * x * x : 1 - ((-2 * x + 2) ** 3) / 2);
-  function frame(now) {
-    if (!running) return;
-    const dt = last ? (now - last) / 1000 : 0;
-    last = now;
-    t += dt;
-    if (m < 1) m = ease(Math.min(1, Math.max(0, (now - introStart) / 2000)));
-    cur.x += (aim.x - cur.x) * 0.035;
-    cur.y += (aim.y - cur.y) * 0.035;
-    physics(dt);
-    render();
-    requestAnimationFrame(frame);
-  }
-  function start() {
-    if (running || reduce.matches || !visible || document.hidden) return;
-    running = true;
-    last = 0;
-    requestAnimationFrame(frame);
-  }
-  const stop = () => { running = false; };
-
-  function init() {
-    build();
-    if (reduce.matches) { m = 1; render(); return; }
-    introStart = performance.now() + 380;
-    render();
-    start();
-    new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); else stop(); }).observe(stage);
-    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  }
-  reduce.addEventListener?.('change', () => { if (reduce.matches) { stop(); m = 1; t = 0; aim.x = aim.y = cur.x = cur.y = 0; render(); } else start(); });
-
-  // Pointer: the group tilts toward the cursor; the piece under it lifts a little; the faint pattern drifts.
-  const drift = $('.sculpt-pattern [data-drift]', stage);
-  let hovered = null;
-  stage.addEventListener('pointermove', (e) => {
-    if (!finePointer.matches || reduce.matches) return;
-    const r = stage.getBoundingClientRect();
-    aim.x = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - 0.5) * 2));
-    aim.y = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - 0.5) * 2));
-    if (drift) drift.style.transform = `translate(${(-aim.x * 7).toFixed(1)}px, ${(-aim.y * 7).toFixed(1)}px)`;
-    const over = e.target.closest?.('[data-piece]')?.dataset.piece || null;
-    if (over !== hovered) { hovered = over; parts.forEach((p) => { const on = p.l === over; p.liftTo = on ? 4 : 0; p.turnTo = on ? (p.pose.rz < 0 ? -2.2 : 2.2) : 0; }); }
-  });
-  stage.addEventListener('pointerleave', () => {
-    aim.x = 0; aim.y = 0; hovered = null;
-    parts.forEach((p) => { p.liftTo = 0; p.turnTo = 0; });
-    if (drift) drift.style.transform = '';
-  });
-  let skipClick = false;
-  stage.addEventListener('pointerdown', (e) => {
-    if (e.pointerType === 'mouse' && e.button === 0) { skipClick = true; act(e.target.closest?.('[data-piece]')?.dataset.piece); }
-  });
-  stage.addEventListener('click', (e) => {
-    if (skipClick) { skipClick = false; return; }
-    act(e.target.closest?.('[data-piece]')?.dataset.piece);
-  });
-
-  // On touch screens, say the mark can be played with, once.
-  if (hint) {
-    const touch = matchMedia('(hover: none)').matches;
-    if (touch) $('[data-hint-text]', hint).textContent = hint.dataset.touch;
-    if (touch && !store.get('kuan-nudged', false)) {
-      setTimeout(() => hint.classList.add('is-nudging'), 2600);
-      store.set('kuan-nudged', true);
-    }
-  }
-
-  init();
-  return { act, built: () => built };
-})();
-
 /* ---------- Small discoveries: photos shift in their frames, pattern fragments drift ---------- */
 $$('[data-crop]').forEach((frame) => {
   frame.addEventListener('pointermove', (e) => {
@@ -321,7 +101,19 @@ if (ritualStage) {
   io.observe(ritualStage);
 }
 
-/* ---------- Phone hero: a tap on one of the four forms nudges it and lets it settle ---------- */
+/* ---------- Hero: the four forms of the poster. With a mouse each leans a few px toward the pointer by its own
+   depth; a press nudges a form and lets it settle. Nothing here selects anything. ---------- */
+const heroEl = $('.hero');
+const heroForms = $('.hero-forms');
+if (heroEl && heroForms) {
+  heroEl.addEventListener('pointermove', (e) => {
+    if (!finePointer.matches || reduce.matches) return;
+    const r = heroForms.getBoundingClientRect();
+    heroForms.style.setProperty('--mx', (((e.clientX - r.left) / r.width) - 0.5).toFixed(3));
+    heroForms.style.setProperty('--my', (((e.clientY - r.top) / r.height) - 0.5).toFixed(3));
+  });
+  heroEl.addEventListener('pointerleave', () => { heroForms.style.setProperty('--mx', '0'); heroForms.style.setProperty('--my', '0'); });
+}
 $$('.hf-shape').forEach((el) => {
   el.addEventListener('pointerdown', () => {
     if (reduce.matches) return;

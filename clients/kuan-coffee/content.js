@@ -22,8 +22,6 @@ export default {
     // Says what the button does today: no foodpanda link is verified yet. Becomes "Get it delivered" with a link.
     secondary: 'Call for delivery',
     note: 'Order ahead, collect at the counter. Every day, 7:00 AM to 10:00 PM.',
-    markLabel: 'The KUAN mark as four white forms. Press to move one.',
-    hint: { touch: 'Tap a piece', pointer: 'Click a piece' },
   },
 
   place: {

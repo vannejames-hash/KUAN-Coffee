@@ -1,5 +1,13 @@
 # Kuan Coffee changelog
 
+## V8 (2026-11-11): the poster hero on desktop
+
+- **Desktop** now uses the phone hero's idea, the mark as a landscape. The 3D sculpture and its "Click a piece" hint are replaced by a full-bleed cobalt poster: K and U hang from the top edge and A and N stand on the foot, each cropped. The white headline sits left, and the intro, both buttons and the ordering note sit right, all in the gap between the forms.
+- **Motion:** the same entrance as phones (the forms part, the words and buttons settle, about 1.1s). With a mouse, each form leans toward the pointer by its own depth, lifts on hover and settles after a click.
+- **Phones:** unchanged from V7; both widths now share one set of styles.
+- **Removed:** the 3D renderer in `app.js`, its stage, pose data and outlines in `brand.js`, and its hint copy.
+- Checked at 1920 × 1080, 1440 × 900, 1366 × 768 and the three phone sizes; interaction and reduced motion were tested headlessly.
+
 ## V7 (2026-11-11): phone hero, the mark as a landscape
 
 - **Phones only.** The hero is no longer the desktop sculpture stacked with the copy. The first screen is a cobalt poster: K and U large at the top, A and N rising from the bottom edge, each cropped by the screen, and the headline, both buttons and the live "Open now" status set in the gap between them.
